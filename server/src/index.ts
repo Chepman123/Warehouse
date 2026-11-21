@@ -1,13 +1,14 @@
 import express from 'express';
 import cors from 'cors';
-import Routes from './Routes';
 import helmet from "helmet";
-
+import Reg from './Routes/RegLog';
+const cookieParser = require('cookie-parser');
 const app = express();
 app.use(helmet());
 app.use(express.json({limit:'10mb'}));
+app.use(cookieParser());
 
-const allowedOrigins = ['https://dantway.pl', 'http://localhost:5173'];
+const allowedOrigins = ['https://pervomens-website-ruddy.vercel.app','https://pervomens-website-ruddy.vercel.app/?_vercel_share=uyat8wNZIvXgaurg66yBDvrDSsxgGeTW', 'http://localhost:5173'];
 
 app.use(cors({
   origin: function(origin, callback) {
@@ -18,14 +19,16 @@ app.use(cors({
       callback(new Error('Not allowed by CORS'));
     }
   },
-  methods: ['GET','POST','OPTIONS','DELETE'],
+  methods: ['GET','POST','OPTIONS','DELETE','PATCH','PUT'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
 }));
 
+
 app.options('*', cors());
 
-app.use('/', Routes());
+app.use('/', Reg());
+
 
 const PORT = 5000;
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
